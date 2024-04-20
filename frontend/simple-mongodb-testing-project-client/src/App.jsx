@@ -1,33 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Link } from 'react-router-dom';
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const handleuserform = event => {
+    event.preventDefault();
+    const name = event.target.name.value;
+    const email = event.target.email.value;
+    const user = { name, email }
+    console.log(user)
+
+    fetch("http://localhost:5000/users",{
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(user)
+    })
+    .then(res => res.json())
+    .then(data =>{
+      console.log(data);
+      if(data.insertedId){
+        alert("users added successfully");
+        event.target.reset();
+      }
+    })
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      <h1>Simple Mongodb Testing</h1>
+      <form onSubmit={handleuserform}>
+        <label>Name</label>
+        <input type="text" name="name" id="name" />
+        <label>Email</label>
+        <input type="email" name="email" id="email" />
+        <button type="submit">Submit</button>
+      </form>
+      <Link to={"/users"}> <button type="button">Show All users</button> </Link>
+
     </>
   )
 }
