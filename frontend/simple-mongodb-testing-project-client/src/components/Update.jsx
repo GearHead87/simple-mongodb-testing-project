@@ -1,10 +1,8 @@
-import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 
 const Update = () => {
 
     const loadedUser = useLoaderData();
-    // const [user, setUser] = useState(loadedUser);
     console.log(loadedUser._id)
 
     const handleUpdate = event => {

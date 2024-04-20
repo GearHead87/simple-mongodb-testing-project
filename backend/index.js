@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MONGODB_URI } = require('./env.local');
 
 
 const app = express();
@@ -11,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 // mongoDB database
-const uri = "mongodb+srv://hosanulislam87:XXPZmmCaOyriXEEL@cluster0.ahe248t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = MONGODB_URI;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -36,9 +37,9 @@ async function run() {
             res.send(result);
         })
 
-        app.get('/users/:id', async (req, res) =>{
+        app.get('/users/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)};
+            const query = { _id: new ObjectId(id) };
             const result = await userCollection.findOne(query);
             res.send(result);
         })
@@ -50,12 +51,12 @@ async function run() {
             res.send(result);
         })
 
-        app.put('/users/:id', async(req, res)=>{
+        app.put('/users/:id', async (req, res) => {
             const id = req.params.id;
             const userData = req.body;
             console.log("UPDATE USER", id, userData)
-            const filter = {_id: new ObjectId(id)};
-            const options = {upsert: true};
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
             const updateDoc = {
                 $set: {
                     name: userData.name,
