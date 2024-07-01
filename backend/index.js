@@ -1,18 +1,20 @@
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jwtwebtoken');
+require('dotenv').config()
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-const { MONGODB_URI } = require('./env.local');
 
 
 const app = express();
 const port = process.env.PORT || 5000;
+
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
 // mongoDB database
-const uri = MONGODB_URI;
+const uri = `mongodb+srv://${process.env.DBUSERNAME}:${process.env.DBPASSWORD}@cluster0.ahe248t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -30,6 +32,11 @@ async function run() {
         await client.connect();
 
         const userCollection = client.db("userDB").collection('users');
+
+        app.post('/jwt', async(req, res) =>{
+            const user = req.body;
+            console.log(user);
+        })
 
         app.get('/users', async (req, res) => {
             const cursor = userCollection.find();
